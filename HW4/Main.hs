@@ -1,4 +1,7 @@
 -- Exercise 1
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+
+{-# HLINT ignore "Use map" #-}
 
 fun1 :: [Integer] -> Integer
 fun1 [] = 1
