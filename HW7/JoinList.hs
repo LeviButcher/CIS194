@@ -1,9 +1,7 @@
 module JoinList where
 
--- import Data.Monoid
-
--- import Data.Monoid
-import Sized (Sized (..), getSize)
+import Data.Monoid
+import Sized (Size (Size), Sized (..), getSize)
 
 data JoinList m a
   = Empty
@@ -25,14 +23,10 @@ jlHead Empty = Nothing
 jlHead (Single _ a) = Just a
 jlHead (Append _ l _) = jlHead l
 
--- jlTail :: JoinList m a -> Maybe (JoinList m a)
-
--- jlTail (Append)
-
 indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
 indexJ i (Append m l r)
-  | i < (getSize . tag $ l) = indexJ (pred 1) l
-  | otherwise = indexJ (pred 1) r
+  | i < (getSize . size . tag $ l) = indexJ i l
+  | otherwise = indexJ (i - (getSize . size . tag $ l)) r
 indexJ 0 (Single _ a) = Just a
 indexJ _ _ = Nothing
 
@@ -40,3 +34,7 @@ jlToList :: JoinList m a -> [a]
 jlToList Empty = []
 jlToList (Single _ a) = [a]
 jlToList (Append _ l r) = jlToList l ++ jlToList r
+
+testList = Single (Size 1) '0' +++ Single (Size 1) '1' +++ Single (Size 1) '2'
+
+-- indexJ 0 testList == Just 'y'
